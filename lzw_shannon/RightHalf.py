@@ -18,11 +18,12 @@ class RightHalf(QWidget):
 
     def init_ui(self):
         self.setGeometry(100,100,300,300)
-        self.mainVbox.addWidget(self.label)
         self.mainVbox.addWidget(self.imageLabel)
+        self.mainVbox.addWidget(self.label)
         self.imageLabel.setMaximumWidth(500)
         self.imageLabel.setMaximumHeight(300)
         self.imageLabel.setScaledContents(True)
+        self.labelVbox.addStretch(0)
 
         self.scrollWidget.setLayout(self.labelVbox)
         self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)

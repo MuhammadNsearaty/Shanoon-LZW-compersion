@@ -55,10 +55,7 @@ class SHANNON:
                 with open(input_file, "rb") as imageFile:
                     str1 = base64.b64encode(imageFile.read())
                     infile = bytearray(str1)
-            size = len(infile)  # size of the bytes array
-            print("before encoding the size of the file is", size)
-            # print infile
-            print("infile", infile)
+            sizeBefor = len(infile)  # sizeBefor of the bytes array
             # calculate the probability of each byte
             freq = [0] * 256  # initiate the list of probability
             for b in infile:
@@ -104,8 +101,6 @@ class SHANNON:
                     u += (strbyte[i] - 48) * 2 ** (7 - i)
                 dcmlst.append(u)
             flst = bytearray(dcmlst)
-            print(infile)
-            print(flst)
             out = input_file.split(".")[0]
             output_file = open(out + ".fano", "wb")
             for data in flst:
@@ -113,4 +108,5 @@ class SHANNON:
             output_file.close()
             if fileExtension == ".txt":
                 fi.close()
-            print("\nafter the compression the size of the file is", len(flst))
+            sizeAfter = len(flst)
+            return (sizeBefor,sizeAfter)

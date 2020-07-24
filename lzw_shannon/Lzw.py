@@ -27,13 +27,12 @@ class LZW:
         # Reading the compressed file.
         file = open(input_file, "rb")
         while True:
-            rec = file.read(2)
-            if len(rec) != 2:
+            rec = file.read(4)
+            if len(rec) != 4:
                 break
-            (data,) = unpack('>H', rec)
-            compressed_data.append(data)
+            data = unpack('>L', rec)
+            compressed_data.append(data[0])
 
-        print("co",compressed_data)
         # Building and initializing the dictionary.
         dictionary_size = 256
         dictionary = dict([(x, chr(x)) for x in range(dictionary_size)])
@@ -58,7 +57,10 @@ class LZW:
                 output_file.write(data)
             output_file.close()
             file.close()
-            return output_file
+            with open(input_file, 'ab') as fr:
+                fr.write(("\n" + fileExtension).encode('utf-8'))
+            fr.close()
+            return fileName
 
         else:
             out = input_file.split(".")[0]
@@ -66,7 +68,11 @@ class LZW:
             imgdata = base64.b64decode(decompressed_data)
             with open(imageName, 'wb') as f:
                 f.write(imgdata)
-            return "hello"
+
+            with open(input_file, 'ab') as fr:
+                fr.write(("\n" + fileExtension).encode('utf-8'))
+            fr.close()
+            return imageName
 
     def compress(self, input_file):
         # input_file = "New Text Document (6).txt"
@@ -82,9 +88,7 @@ class LZW:
                 data = base64.b64encode(img_file.read())
                 data = str(data,'utf-8')
 
-            #data = self.get_image_values(input_file)
-
-        print("data : ",data,"\nsize before : ",len(data))
+        sizeBefore = len(data)
         dictionary_size = 256
         dictionary = {chr(i): i for i in range(dictionary_size)}
         string = ""  # String is null.
@@ -105,14 +109,15 @@ class LZW:
 
         if string in dictionary:
             compressed_data.append(dictionary[string])
-        print("compressed",compressed_data,"\nsize after : ",len(compressed_data))
+        sizeAfter = len(compressed_data)
+
         # storing the compressed string into a file (byte-wise).
 
         out = input_file.split(".")[0]
         output_file = open(out + ".lzw", "wb")
 
         for data in compressed_data:
-            output_file.write(pack('>H', int(data)))
+            output_file.write(pack('>L', int(data)))
         output_file.write(("\n"+fileExtension).encode('utf-8'))
 
-        return out
+        return (sizeBefore,sizeAfter)
