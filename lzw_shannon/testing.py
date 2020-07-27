@@ -19,20 +19,20 @@ class Window(QtWidgets.QWidget):
         dlg.setFileMode(QtWidgets.QFileDialog.DirectoryOnly)
         if dlg.exec_() == QtWidgets.QDialog.Accepted:
             self.dirName = dlg.selectedFiles()[0]
+            self.recursiveSearch(self.dirName)
 
-        """for filename in os.listdir(self.dirName):
-            if os.path.isdir(filename):
-                print(filename + " dir")
-            if filename.endswith(".jpg") or filename.endswith(".jpeg") or filename.endswith(".png") or filename.endswith(".txt"):
-                print(filename)"""
 
     def recursiveSearch(self,direct):
-        for file in direct:
-            if file is directory:
-                self.recursiveSearch(file)
-            else:
-                self.lzw.compress(file)
-        pass
+        for filename in os.listdir(direct):
+            name = direct+"/"+filename
+            if os.path.isdir(name):
+                self.recursiveSearch(name)
+                self.right.addText(name + " compressed")
+            if filename.endswith(".jpg") or filename.endswith(".jpeg") or filename.endswith(
+                    ".png") or filename.endswith(".txt"):
+                self.lzw.compress(direct+"/"+filename)
+                self.right.addText(direct+"/"+filename + " compressed from folder")
+
     def openFileDialog(self):
         self.fileName = QtWidgets.QFileDialog.getOpenFileName(self,
                                                 str("Open Image"),
