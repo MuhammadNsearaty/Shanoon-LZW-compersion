@@ -5,7 +5,7 @@ from lzw_shannon.LeftHalf import LeftHalf
 from lzw_shannon.Lzw import LZW
 from lzw_shannon.RightHalf import RightHalf
 from lzw_shannon.shannon_fano import SHANNON
-
+import os
 
 class Window(QtWidgets.QWidget):
     def __init__(self):
@@ -14,12 +14,31 @@ class Window(QtWidgets.QWidget):
         self.fano = SHANNON()
         self.lzw = LZW()
         self.init_ui()
+    def openDirDialog(self):
+        dlg = QtWidgets.QFileDialog()
+        dlg.setFileMode(QtWidgets.QFileDialog.DirectoryOnly)
+        if dlg.exec_() == QtWidgets.QDialog.Accepted:
+            self.dirName = dlg.selectedFiles()[0]
+
+        """for filename in os.listdir(self.dirName):
+            if os.path.isdir(filename):
+                print(filename + " dir")
+            if filename.endswith(".jpg") or filename.endswith(".jpeg") or filename.endswith(".png") or filename.endswith(".txt"):
+                print(filename)"""
+
+    def recursiveSearch(self,direct):
+        for file in direct:
+            if file is directory:
+                self.recursiveSearch(file)
+            else:
+                self.lzw.compress(file)
+        pass
     def openFileDialog(self):
         self.fileName = QtWidgets.QFileDialog.getOpenFileName(self,
-                                                         str("Open Image"),
-                                                         "/home/jana",
-                                                         str("Images (*.png *.jpg);;Text files (*.txt)"))
-        if self.fileName:
+                                                str("Open Image"),
+                                                "newFile",
+                                                str("Images (*.png *.jpg *.jpeg);;Text files (*.txt)"))
+        if self.fileName[0] != "":
             self.left.compressButton.setEnabled(True)
             self.right.setImage(self.fileName[0])
             self.right.addText(self.fileName[0] + " loaded successfully")
@@ -32,6 +51,7 @@ class Window(QtWidgets.QWidget):
             self.newName = self.lzw.decompress(self.extractedFileName[0])
             self.right.addText(self.newName + " Extracted successfully")
             self.right.setImage(self.newName)
+            self.left.compressButton.setEnabled(False)
 
     def compress(self):
         self.flag =""
@@ -45,7 +65,6 @@ class Window(QtWidgets.QWidget):
         self.right.addText(self.fileName[0] + " compressed successfully")
         self.right.addText("("+self.flag+")"+"the document size before compressing " + str(out[0]))
         self.right.addText("("+self.flag+")"+"the document size after compressing " + str(out[1]))
-        self.left.compressButton.setEnabled(False)
 
     def init_ui(self):
         self.mainHbox = QtWidgets.QHBoxLayout()
@@ -60,6 +79,7 @@ class Window(QtWidgets.QWidget):
         self.left.openButton.clicked.connect(self.openFileDialog)
         self.left.compressButton.clicked.connect(self.compress)
         self.left.extractButton.clicked.connect(self.extract)
+        self.left.openDirButton.clicked.connect(self.openDirDialog)
 
         self.mainHbox.addLayout(self.leftVbox)
         self.mainHbox.addLayout(self.rightVbox)

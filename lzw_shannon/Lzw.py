@@ -16,7 +16,7 @@ class LZW:
         string = ""
 
         lines = file.readlines()
-        fileExtension = lines[len(lines)-1].decode('utf-8')
+        fileExtension = lines[len(lines)-1].decode('ascii')
         lines = lines[:-1]
         file.close()
         with open(input_file, 'wb') as fr:
@@ -36,14 +36,13 @@ class LZW:
         # Building and initializing the dictionary.
         dictionary_size = 256
         dictionary = dict([(x, chr(x)) for x in range(dictionary_size)])
-        print("dictionary", dictionary)
         # iterating through the codes.
         # LZW Decompression algorithm
         for code in compressed_data:
             if not (code in dictionary):
                 dictionary[code] = string + (string[0])
             decompressed_data += dictionary[code]
-            if not (len(string) == 0):
+            if string:
                 dictionary[next_code] = string + (dictionary[code][0])
                 next_code += 1
             string = dictionary[code]
@@ -58,7 +57,7 @@ class LZW:
             output_file.close()
             file.close()
             with open(input_file, 'ab') as fr:
-                fr.write(("\n" + fileExtension).encode('utf-8'))
+                fr.write(("\n" + fileExtension).encode('ascii'))
             fr.close()
             return fileName
 
@@ -70,14 +69,13 @@ class LZW:
                 f.write(imgdata)
 
             with open(input_file, 'ab') as fr:
-                fr.write(("\n" + fileExtension).encode('utf-8'))
+                fr.write(("\n" + fileExtension).encode('ascii'))
             fr.close()
             return imageName
 
     def compress(self, input_file):
-        # input_file = "New Text Document (6).txt"
         n = 1024
-        maximum_table_size = pow(2, int(n))
+        maximum_table_size = 1 << n
         fileName, fileExtension = os.path.splitext(input_file)
         if fileExtension == ".txt":
             file = open(input_file)
@@ -118,6 +116,7 @@ class LZW:
 
         for data in compressed_data:
             output_file.write(pack('>L', int(data)))
-        output_file.write(("\n"+fileExtension).encode('utf-8'))
+        output_file.write(("\n"+fileExtension).encode('ascii'))
+        output_file.close()
 
         return (sizeBefore,sizeAfter)

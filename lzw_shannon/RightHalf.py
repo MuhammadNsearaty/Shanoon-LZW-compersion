@@ -25,6 +25,7 @@ class RightHalf(QWidget):
         self.imageLabel.setScaledContents(True)
         self.labelVbox.addStretch(0)
 
+
         self.scrollWidget.setLayout(self.labelVbox)
         self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)

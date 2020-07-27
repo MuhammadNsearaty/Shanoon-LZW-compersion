@@ -8,7 +8,8 @@ class LeftHalf(QWidget):
     def __init__(self):
         super().__init__()
         self.mainVbox = QVBoxLayout()
-        self.openButton = QPushButton("Open")
+        self.openButton = QPushButton("Open File")
+        self.openDirButton = QPushButton("Open Directory")
         self.compressButton = QPushButton("Compress")
         self.extractButton = QPushButton("Extract")
         self.lzwRadio = QRadioButton("LZW")
@@ -16,6 +17,7 @@ class LeftHalf(QWidget):
         self.init_ui()
     def init_ui(self):
         self.mainVbox.addWidget(self.openButton)
+        self.mainVbox.addWidget(self.openDirButton)
         self.mainVbox.addWidget(self.compressButton)
         self.mainVbox.addWidget(self.extractButton)
         self.mainVbox.addWidget(self.lzwRadio)
