@@ -1,4 +1,7 @@
 import sys
+import ntpath
+from PIL import Image
+from io import StringIO
 from PyQt5 import (QtWidgets, QtGui, QtCore)
 
 from lzw_shannon.LeftHalf import LeftHalf
@@ -58,9 +61,22 @@ class Window(QtWidgets.QWidget):
         if self.left.lzwRadio.isChecked():
             out = self.lzw.compress(self.fileName[0])
             self.flag ="lzw"
-        else:
+        elif self.left.fanoRadio.isChecked():
             out = self.fano.compress(self.fileName[0])
             self.flag="shannon-fano"
+        else:
+            self.flag = "jpeg"
+            out = [1, 1]
+            out[0] = os.stat(self.fileName[0]).st_size
+            picture = Image.open(self.fileName[0])
+
+            imgName = self.fileName[0].split(".")[0]
+            imgName = imgName+".jpeg"
+
+
+            picture.save(imgName, "JPEG", optimize=True, quality=85)
+
+            out[1] = os.stat(imgName).st_size
 
         self.right.addText(self.fileName[0] + " compressed successfully")
         self.right.addText("("+self.flag+")"+"the document size before compressing " + str(out[0]))

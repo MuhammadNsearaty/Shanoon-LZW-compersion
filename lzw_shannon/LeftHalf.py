@@ -14,6 +14,7 @@ class LeftHalf(QWidget):
         self.extractButton = QPushButton("Extract")
         self.lzwRadio = QRadioButton("LZW")
         self.fanoRadio = QRadioButton("Shannon-Fano")
+        self.jpegRadio = QRadioButton("JPEG")
         self.init_ui()
     def init_ui(self):
         self.mainVbox.addWidget(self.openButton)
@@ -22,6 +23,7 @@ class LeftHalf(QWidget):
         self.mainVbox.addWidget(self.extractButton)
         self.mainVbox.addWidget(self.lzwRadio)
         self.mainVbox.addWidget(self.fanoRadio)
+        self.mainVbox.addWidget(self.jpegRadio)
         self.lzwRadio.setChecked(True)
         self.compressButton.setEnabled(False)
         self.mainVbox.addStretch(0)

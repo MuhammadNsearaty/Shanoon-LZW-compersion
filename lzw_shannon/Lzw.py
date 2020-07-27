@@ -119,4 +119,4 @@ class LZW:
         output_file.write(("\n"+fileExtension).encode('ascii'))
         output_file.close()
 
-        return (sizeBefore,sizeAfter)
+        return sizeBefore, sizeAfter
